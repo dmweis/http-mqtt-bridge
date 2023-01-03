@@ -8,6 +8,11 @@ pub async fn health_check() -> impl Responder {
 }
 
 #[derive(serde::Deserialize)]
+struct PathKey {
+    key: String,
+}
+
+#[derive(serde::Deserialize)]
 struct SendCommand {
     content: Option<String>,
 }
@@ -15,7 +20,9 @@ struct SendCommand {
 #[post("/send_message")]
 async fn send_message(
     command: web::Json<SendCommand>,
+    path: web::Path<PathKey>,
     speech_service: web::Data<()>,
+    key: web::Data<()>,
 ) -> impl Responder {
     HttpResponse::Ok().finish()
 }

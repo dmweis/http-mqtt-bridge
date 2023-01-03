@@ -4,7 +4,7 @@ use std::path::PathBuf;
 use tracing::*;
 
 /// Use default config if no path is provided
-pub fn get_configuration(config: Option<PathBuf>) -> Result<Settings, config::ConfigError> {
+pub fn get_configuration(config: Option<PathBuf>) -> Result<Configuration, config::ConfigError> {
     let mut settings = config::Config::default();
 
     if let Some(config) = config {
@@ -23,28 +23,28 @@ pub fn get_configuration(config: Option<PathBuf>) -> Result<Settings, config::Co
 }
 
 #[derive(serde::Deserialize, Clone)]
-pub struct Settings {
-    pub application: ApplicationSettings,
+pub struct Configuration {
+    pub server: ServerSettings,
     pub mqtt: MqttSettings,
     #[serde(default)]
     pub logging_settings: LoggingSettings,
 }
 
 #[derive(serde::Deserialize, Clone)]
-pub struct ApplicationSettings {
+pub struct ServerSettings {
+    pub host: String,
     #[serde(deserialize_with = "deserialize_number_from_string")]
     pub port: u16,
-    pub host: String,
 }
 
 #[derive(serde::Deserialize, Clone)]
 pub struct MqttSettings {
+    pub host: String,
+    #[serde(deserialize_with = "deserialize_number_from_string")]
+    pub port: u16,
     pub client_id: String,
     pub username: String,
     pub password: Secret<String>,
-    #[serde(deserialize_with = "deserialize_number_from_string")]
-    pub port: u16,
-    pub host: String,
 }
 
 #[derive(serde::Deserialize, Default, Clone)]

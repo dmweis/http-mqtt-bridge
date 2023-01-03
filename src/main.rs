@@ -1,12 +1,13 @@
 pub mod configuration;
 pub mod routes;
-pub mod startup;
 pub mod telemetry;
 
-use startup::Application;
+use actix_web::{App, HttpServer};
+use routes::{health_check, send_message};
 use std::path::PathBuf;
 use structopt::StructOpt;
 use telemetry::{get_subscriber, init_subscriber};
+use tracing_actix_web::TracingLogger;
 
 #[derive(StructOpt, Debug)]
 #[structopt()]
@@ -29,7 +30,21 @@ async fn main() -> std::io::Result<()> {
     );
     init_subscriber(subscriber);
 
-    let application = Application::build(configuration).await?;
-    application.run_until_stopped().await?;
+    let address = format!(
+        "{}:{}",
+        configuration.server.host, configuration.server.port
+    );
+    tracing::info!("Running server on {}", address);
+
+    HttpServer::new(move || {
+        App::new()
+            .wrap(TracingLogger::default())
+            .service(health_check)
+            .service(send_message)
+    })
+    .bind(address)?
+    .run()
+    .await?;
+
     Ok(())
 }
