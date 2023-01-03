@@ -1,5 +1,5 @@
 use crate::IftttKey;
-use actix_web::{delete, get, post, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{get, post, web, HttpResponse, Responder};
 use rumqttc::AsyncClient;
 
 #[tracing::instrument(name = "Health check")]
