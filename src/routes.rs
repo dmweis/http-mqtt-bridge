@@ -1,5 +1,6 @@
 use crate::IftttKey;
 use actix_web::{delete, get, post, web, App, HttpResponse, HttpServer, Responder};
+use rumqttc::AsyncClient;
 
 #[tracing::instrument(name = "Health check")]
 #[get("/health_check")]
@@ -18,16 +19,27 @@ struct IftttQueryKey {
     key: String,
 }
 
-#[post("/ifttt/{command}")]
+#[post("/ifttt_simple/{command}")]
 async fn send_message(
     path: web::Path<SendMessagePath>,
     query: web::Query<IftttQueryKey>,
-    // mqtt_service: web::Data<()>,
+    mqtt_service: web::Data<AsyncClient>,
     ifttt_key: web::Data<IftttKey>,
 ) -> impl Responder {
     if !ifttt_key.0.eq(&query.key) {
+        tracing::warn!("unauthenticated user");
         HttpResponse::NotFound().finish()
     } else {
+        tracing::info!("Sending message");
+        mqtt_service
+            .publish(
+                "ifttt_simple",
+                rumqttc::QoS::AtMostOnce,
+                false,
+                path.command.as_bytes(),
+            )
+            .await
+            .unwrap();
         HttpResponse::Ok().finish()
     }
 }
