@@ -1,0 +1,35 @@
+[package]
+name = "http-mqtt-bridge"
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+authors = ["David Michael Weis <dweis7@gmail.com>"]
+documentation = "https://davidweis.dev/http-mqtt-bridge/http-mqtt-bridge/"
+publish = false
+
+
+[dependencies]
+actix-web = "4"
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+serde = { version = "1", features = ["derive"] }
+config = "0.11"
+tracing = { version = "0.1", features = ["log"] }
+tracing-subscriber = { version = "0.3", features = [
+    "registry",
+    "env-filter",
+    "json",
+] }
+tracing-bunyan-formatter = "0.3"
+tracing-log = "0.1"
+tracing-actix-web = "0.5"
+serde-aux = "3"
+reqwest = { version = "0.11", default-features = false, features = [
+    "json",
+    "rustls-tls",
+] }
+secrecy = { version = "0.8", features = ["serde"] }
+structopt = "0.3"
+rumqttc = "0.13.0"
+mqtt-router = { git = "https://github.com/dmweis/mqtt-router", branch = "main" }
+anyhow = "1.0"
+thiserror = "1.0"
