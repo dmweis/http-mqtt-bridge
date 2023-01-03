@@ -1,8 +1,12 @@
-.env
 .git
-.dockerignore
-spec.yaml
+.github
+configuration/dev_settings.yaml
 target/
 deploy/
+.dockerignore
+.env
+.gitignore
 Dockerfile
 Makefile
+README.md
+spec.yaml
