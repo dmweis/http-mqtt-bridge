@@ -2,7 +2,7 @@ pub mod configuration;
 pub mod routes;
 pub mod telemetry;
 
-use actix_web::{App, HttpServer};
+use actix_web::{web, App, HttpServer};
 use routes::{health_check, send_message};
 use std::path::PathBuf;
 use structopt::StructOpt;
@@ -15,6 +15,9 @@ struct Opts {
     #[structopt(long)]
     config: Option<PathBuf>,
 }
+
+// New type so that we can pass it to actix-web IOC
+pub struct IftttKey(pub String);
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
@@ -36,11 +39,14 @@ async fn main() -> std::io::Result<()> {
     );
     tracing::info!("Running server on {}", address);
 
+    let ifttt_key = web::Data::new(IftttKey(configuration.bridge.ifttt_key.clone()));
+
     HttpServer::new(move || {
         App::new()
             .wrap(TracingLogger::default())
             .service(health_check)
             .service(send_message)
+            .app_data(ifttt_key.clone())
     })
     .bind(address)?
     .run()

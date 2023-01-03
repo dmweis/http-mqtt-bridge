@@ -1,3 +1,4 @@
+use crate::IftttKey;
 use actix_web::{delete, get, post, web, App, HttpResponse, HttpServer, Responder};
 
 #[tracing::instrument(name = "Health check")]
@@ -8,21 +9,25 @@ pub async fn health_check() -> impl Responder {
 }
 
 #[derive(serde::Deserialize)]
-struct PathKey {
-    key: String,
+struct SendMessagePath {
+    command: String,
 }
 
 #[derive(serde::Deserialize)]
-struct SendCommand {
-    content: Option<String>,
+struct IftttQueryKey {
+    key: String,
 }
 
-#[post("/send_message")]
+#[post("/ifttt/{command}")]
 async fn send_message(
-    command: web::Json<SendCommand>,
-    path: web::Path<PathKey>,
-    speech_service: web::Data<()>,
-    key: web::Data<()>,
+    path: web::Path<SendMessagePath>,
+    query: web::Query<IftttQueryKey>,
+    // mqtt_service: web::Data<()>,
+    ifttt_key: web::Data<IftttKey>,
 ) -> impl Responder {
-    HttpResponse::Ok().finish()
+    if !ifttt_key.0.eq(&query.key) {
+        HttpResponse::NotFound().finish()
+    } else {
+        HttpResponse::Ok().finish()
+    }
 }

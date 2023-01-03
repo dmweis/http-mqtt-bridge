@@ -25,6 +25,7 @@ pub fn get_configuration(config: Option<PathBuf>) -> Result<Configuration, confi
 #[derive(serde::Deserialize, Clone)]
 pub struct Configuration {
     pub server: ServerSettings,
+    pub bridge: BridgeSettings,
     pub mqtt: MqttSettings,
     #[serde(default)]
     pub logging_settings: LoggingSettings,
@@ -35,6 +36,11 @@ pub struct ServerSettings {
     pub host: String,
     #[serde(deserialize_with = "deserialize_number_from_string")]
     pub port: u16,
+}
+
+#[derive(serde::Deserialize, Clone)]
+pub struct BridgeSettings {
+    pub ifttt_key: String,
 }
 
 #[derive(serde::Deserialize, Clone)]
