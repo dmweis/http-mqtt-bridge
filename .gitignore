@@ -3,3 +3,4 @@
 *.log
 
 dev_settings.yaml
+.env
