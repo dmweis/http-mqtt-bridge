@@ -64,7 +64,5 @@ async fn main() -> anyhow::Result<()> {
 #[cfg(test)]
 mod tests {
     #[test]
-    fn make_coverage_happy() {
-        assert!(true);
-    }
+    fn make_coverage_happy() {}
 }
