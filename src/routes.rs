@@ -11,7 +11,7 @@ pub async fn health_check() -> impl Responder {
 
 #[derive(serde::Deserialize)]
 struct SendMessagePath {
-    command: String,
+    topic: String,
 }
 
 #[derive(serde::Deserialize)]
@@ -19,12 +19,13 @@ struct IftttQueryKey {
     key: String,
 }
 
-#[post("/ifttt_simple/{command}")]
+#[post("/ifttt_simple/{topic}")]
 async fn send_message(
     path: web::Path<SendMessagePath>,
     query: web::Query<IftttQueryKey>,
     mqtt_service: web::Data<AsyncClient>,
     ifttt_key: web::Data<IftttKey>,
+    body: String,
 ) -> impl Responder {
     if !ifttt_key.0.eq(&query.key) {
         tracing::warn!("unauthenticated user");
@@ -33,10 +34,10 @@ async fn send_message(
         tracing::info!("Sending message");
         mqtt_service
             .publish(
-                "ifttt_simple",
+                &path.topic,
                 rumqttc::QoS::AtMostOnce,
                 false,
-                path.command.as_bytes(),
+                body.as_bytes(),
             )
             .await
             .unwrap();
