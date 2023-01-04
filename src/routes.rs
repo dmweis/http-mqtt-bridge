@@ -5,7 +5,6 @@ use rumqttc::AsyncClient;
 #[tracing::instrument(name = "Health check")]
 #[get("/health_check")]
 pub async fn health_check() -> impl Responder {
-    tracing::info!("Health check bounce");
     HttpResponse::Ok().finish()
 }
 
