@@ -1,5 +1,5 @@
 # base builder
-FROM rust:1.60.0 as chef
+FROM rust:latest as chef
 
 WORKDIR /app
 RUN apt-get update && apt-get install lld clang -y
