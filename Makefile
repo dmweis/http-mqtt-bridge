@@ -8,11 +8,11 @@ build-docker:
 
 .PHONY: run-docker
 run-docker: build-docker
-	docker run --env-file .env -p 8000:8000 http-mqtt-bridge
+	docker run --env-file .env -p 127.0.0.1:8000:8000 --name http-mqtt-bridge http-mqtt-bridge
 
 .PHONY: start-docker
 start-docker: build-docker
-	docker run -d --env-file .env -p 8000:8000 --name http-mqtt-bridge http-mqtt-bridge
+	docker run -d --env-file .env -p 127.0.0.1:8000:8000 --name http-mqtt-bridge http-mqtt-bridge
 
 .PHONY: stop-docker
 stop-docker:
