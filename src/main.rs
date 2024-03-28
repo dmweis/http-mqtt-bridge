@@ -25,7 +25,7 @@ pub struct IftttKey(pub String);
 async fn main() -> anyhow::Result<()> {
     let opts = Opts::from_args();
     let configuration =
-        configuration::get_configuration(opts.config).expect("Failed to read configuration.");
+        configuration::get_configuration(&opts.config).expect("Failed to read configuration.");
 
     let subscriber = get_subscriber(
         "http-mqtt-bridge".into(),

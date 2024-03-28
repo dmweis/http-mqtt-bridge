@@ -1,7 +1,6 @@
 use crate::configuration::MqttSettings;
 use anyhow::{Context, Result};
 use rumqttc::{self, AsyncClient, MqttOptions, Transport};
-use rustls::ClientConfig;
 use secrecy::ExposeSecret;
 
 pub fn create_mqtt_client(config: &MqttSettings) -> Result<AsyncClient> {
@@ -10,13 +9,12 @@ pub fn create_mqtt_client(config: &MqttSettings) -> Result<AsyncClient> {
     mqtt_options.set_keep_alive(std::time::Duration::from_secs(5));
     mqtt_options.set_credentials(&config.username, config.password.expose_secret());
 
-    let mut root_cert_store = rustls::RootCertStore::empty();
+    let mut root_cert_store = rumqttc::tokio_rustls::rustls::RootCertStore::empty();
     for cert in rustls_native_certs::load_native_certs().context("could not load platform certs")? {
-        root_cert_store.add(&rustls::Certificate(cert.0))?;
+        root_cert_store.add(cert)?;
     }
 
-    let client_config = ClientConfig::builder()
-        .with_safe_defaults()
+    let client_config = rumqttc::tokio_rustls::rustls::ClientConfig::builder()
         .with_root_certificates(root_cert_store)
         .with_no_client_auth();
 

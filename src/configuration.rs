@@ -1,25 +1,31 @@
+use config::Config;
 use secrecy::Secret;
 use serde_aux::field_attributes::deserialize_number_from_string;
 use std::path::PathBuf;
 use tracing::*;
 
 /// Use default config if no path is provided
-pub fn get_configuration(config: Option<PathBuf>) -> Result<Configuration, config::ConfigError> {
-    let mut settings = config::Config::default();
-
-    if let Some(config) = config {
+pub fn get_configuration(config: &Option<PathBuf>) -> anyhow::Result<Configuration> {
+    let settings = if let Some(config) = config {
         info!("Using configuration from {:?}", config);
-        settings.merge(config::File::with_name(config.to_str().unwrap()))?;
+        Config::builder()
+            .add_source(config::Environment::with_prefix("APP"))
+            .add_source(config::File::with_name(
+                config
+                    .to_str()
+                    .ok_or_else(|| anyhow::anyhow!("Failed to convert path"))?,
+            ))
+            .build()?
     } else {
         info!("Using dev configuration");
-        settings
-            .merge(config::File::with_name("configuration/settings"))?
-            .merge(config::File::with_name("configuration/dev_settings"))?;
-    }
+        Config::builder()
+            .add_source(config::Environment::with_prefix("APP"))
+            .add_source(config::File::with_name("config/settings"))
+            .add_source(config::File::with_name("config/dev_settings"))
+            .build()?
+    };
 
-    settings.merge(config::Environment::with_prefix("APP").separator("__"))?;
-
-    settings.try_into()
+    Ok(settings.try_deserialize()?)
 }
 
 #[derive(serde::Deserialize, Clone)]

@@ -12,7 +12,7 @@ publish = false
 actix-web = "4"
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 serde = { version = "1", features = ["derive"] }
-config = "0.11"
+config = "0.14"
 tracing = { version = "0.1", features = ["log"] }
 tracing-subscriber = { version = "0.3", features = [
     "registry",
@@ -20,18 +20,18 @@ tracing-subscriber = { version = "0.3", features = [
     "json",
 ] }
 tracing-bunyan-formatter = "0.3"
-tracing-log = "0.1"
-tracing-actix-web = "0.5"
-serde-aux = "3"
-reqwest = { version = "0.11", default-features = false, features = [
+tracing-log = "0.2"
+tracing-actix-web = "0.7"
+serde-aux = "4.5"
+reqwest = { version = "0.12", default-features = false, features = [
     "json",
     "rustls-tls",
 ] }
 secrecy = { version = "0.8", features = ["serde"] }
 structopt = "0.3"
-rumqttc = "0.13.0"
+rumqttc = "0.24.0"
 mqtt-router = { git = "https://github.com/dmweis/mqtt-router", branch = "main" }
 anyhow = "1.0"
 thiserror = "1.0"
-rustls = "0.20"
-rustls-native-certs = "0.6"
+rustls = "0.23.4"
+rustls-native-certs = "0.7"
