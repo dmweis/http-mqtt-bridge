@@ -1,0 +1,3 @@
+(function() {var implementors = {
+"http_mqtt_bridge":[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.77.1/core/default/trait.Default.html\" title=\"trait core::default::Default\">Default</a> for <a class=\"struct\" href=\"http_mqtt_bridge/configuration/struct.LoggingSettings.html\" title=\"struct http_mqtt_bridge::configuration::LoggingSettings\">LoggingSettings</a>"]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["IftttQueryKey","SendMessagePath","health_check","send_message"]};

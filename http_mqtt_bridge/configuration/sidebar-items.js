@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["get_configuration"],"struct":["BridgeSettings","Configuration","LoggingSettings","MqttSettings","ServerSettings"]};

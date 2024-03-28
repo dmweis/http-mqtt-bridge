@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["main"],"mod":["configuration","mqtt","routes","telemetry"],"struct":["IftttKey","Opts"]};

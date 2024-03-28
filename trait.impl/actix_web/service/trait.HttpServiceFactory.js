@@ -1,0 +1,3 @@
+(function() {var implementors = {
+"http_mqtt_bridge":[["impl HttpServiceFactory for <a class=\"struct\" href=\"http_mqtt_bridge/routes/struct.send_message.html\" title=\"struct http_mqtt_bridge::routes::send_message\">send_message</a>"],["impl HttpServiceFactory for <a class=\"struct\" href=\"http_mqtt_bridge/routes/struct.health_check.html\" title=\"struct http_mqtt_bridge::routes::health_check\">health_check</a>"]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
