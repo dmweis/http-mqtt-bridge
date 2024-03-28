@@ -2,7 +2,7 @@
 FROM rust:latest as chef
 
 WORKDIR /app
-RUN apt-get update && apt-get install lld clang -y
+RUN apt-get update && apt-get install lld clang cmake -y
 RUN cargo install cargo-chef
 
 # rust layer caching
